@@ -1,0 +1,6 @@
+# multiplet size = 3 
+# significance level = 0.05 
+miRNA	QualityThreshold
+FX	0.51
+FY	0.5
+FZ	0.53

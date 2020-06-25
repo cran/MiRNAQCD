@@ -1,0 +1,3 @@
+#classifier: 1*FX  -1*FZ  
+Threshold	DeltaThreshold	DPrime	Pc	ChiUp	DChiUp	ChiDown	DChiDown	AUC	AUCDown	AUCUp
+4.553988	0.1212246	3.319967	0.9515695	5.219851	0.160571	3.879699	0.1712644	0.9847125	0.9625236	1
