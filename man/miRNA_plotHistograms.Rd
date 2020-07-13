@@ -8,7 +8,9 @@ miRNA_plotHistograms(
   inputDataset,
   thresholdFrame = character(),
   outputFileLabel,
-  plotFormat = "pdf"
+  plotFormat = "pdf",
+  histogramParameters = character(),
+  colorComplementFlag = FALSE
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ miRNA_plotHistograms(
 \item{outputFileLabel}{Label to be used to build the name of the output file.}
 
 \item{plotFormat}{String to set the format of the output file. Can either be 'pdf' (default) or 'png'.}
+
+\item{histogramParameters}{String specifying the parameters used to build the histogram. If empty, the histogram is built by assessing suitable parameters from the data. The string has to comply with the format "xl_xu_bw", where: xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.}
+
+\item{colorComplementFlag}{Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red.}
 }
 \value{
 A ggplot object containing the plot.

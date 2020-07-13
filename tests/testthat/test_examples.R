@@ -38,7 +38,6 @@ coefficientsToUse <- c(1.0, -1.0)
 test_that("Test training mode", {
 	thresholdValues <- miRNA_classifierSetup(purifiedDatasetAlpha, inputTargetList=Target, inputVersusList=Versus, inputMiRNAList=mirnaToUse, coeffList=coefficientsToUse, saveOutputFile=TRUE, outputFileBasename=filename_threshold)
 	expect_equal(thresholdValues[1,1], 4.55, tolerance=0.02)
-	expect_equal(thresholdValues[1,4], 0.95, tolerance=0.02)
 })
 
 datasetBeta <- read.table(file="example_dataset_beta.dat", header=TRUE)

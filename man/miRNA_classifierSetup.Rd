@@ -13,7 +13,11 @@ miRNA_classifierSetup(
   saveOutputFile = FALSE,
   outputFileBasename = "",
   sep = "\\t",
-  plotFormat = "pdf"
+  plotFormat = "pdf",
+  scorePlotAscending = TRUE,
+  scorePlotParameters = character(),
+  histogramParameters = character(),
+  colorComplementFlag = FALSE
 )
 }
 \arguments{
@@ -33,7 +37,15 @@ miRNA_classifierSetup(
 
 \item{sep}{Field separator character for the output files; the default is tabulation.}
 
-\item{plotFormat}{String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".
+\item{plotFormat}{String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".}
+
+\item{scorePlotAscending}{Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'.}
+
+\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
+
+\item{histogramParameters}{String specifying the parameters used to build histograms. If empty, histograms are built by assessing suitable parameters from the data. This parameter is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the following format: "xl_xu_bw", where xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.}
+
+\item{colorComplementFlag}{Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red. This argument is meaningful only if saveOutputFile is set to TRUE.
 
 Beware! Cross-correlation coefficients, as well as Shapiro-Wilk tests for normality, require at least three data samples. In case of less than three samples, those tests are skipped and "NA" (not available) is reported in the corresponding output.}
 }
@@ -52,7 +64,7 @@ In order to select between Analysis and Training mode, the input parameters "inp
 }
 \examples{
 requiredFile = paste(system.file(package="MiRNAQCD"),
-		"/extdata/dataset_alpha_clean.dat", sep='')
+		"/extdata/test_dataset_alpha_clean.dat", sep='')
 myDataFrame <- read.table(file=requiredFile, header=TRUE)
 Target <- c("A")
 Versus <- c("B", "C")

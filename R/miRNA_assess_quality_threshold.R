@@ -50,8 +50,11 @@
 #'
 #' @return A data frame of quality threshold values, containing the columns 'miRNA' and 'QualityThreshold'.
 #'
+#' Please refer to the user manual installed in "/path-to-library/MiRNAQCD/doc/manual.pdf" for detailed function documentation. The path "/path-to-library" can be shown from R by calling ".libPaths()"
+#'
 #' @examples
-#' requiredFile = paste(system.file(package="MiRNAQCD"), "/extdata/dataset_alpha_prep.dat", sep='')
+#' requiredFile = paste(system.file(package="MiRNAQCD"),
+#'			"/extdata/test_dataset_alpha_prep.dat", sep='')
 #' myDataFrame <- read.table(file=requiredFile, header=TRUE)
 #' qt <- miRNA_assessQualityThreshold(myDataFrame, significanceLevel=0.05)
 

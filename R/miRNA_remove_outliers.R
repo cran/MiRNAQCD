@@ -49,12 +49,14 @@
 #'
 #' @return A data frame corresponding to a copy of the input dataset devoid of outliers. The output data frame thus contains the columns 'Subject', 'miRNA', 'Mean', 'StdDev', 'Variance', 'SampleSize' and possibly 'Class'.
 #'
+#' Please refer to the user manual installed in "/path-to-library/MiRNAQCD/doc/manual.pdf" for detailed function documentation. The path "/path-to-library" can be shown from R by calling ".libPaths()"
+#'
 #' @examples
 #' requiredDataFile = paste(system.file(package="MiRNAQCD"),
-#'			"/extdata/dataset_alpha_prep.dat", sep='')
+#'			"/extdata/test_dataset_alpha_prep.dat", sep='')
 #' myDataFrame <- read.table(file=requiredDataFile, header=TRUE)
 #' requiredQtFile = paste(system.file(package="MiRNAQCD"),
-#'			"/extdata/dataset_alpha_qt.dat", sep='')
+#'			"/extdata/test_dataset_alpha_qt.dat", sep='')
 #' qtDataFrame <- read.table(file=requiredQtFile, header=TRUE)
 #' myDataFrameCleaned <- miRNA_removeOutliers(myDataFrame, qtDataFrame)
 

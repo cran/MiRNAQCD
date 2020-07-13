@@ -1,0 +1,28 @@
+######################
+## PACKAGE EXAMPLES ##
+######################
+
+# Synthetic examples
+This folder contains two synthetic datasets, synthetic_dataset_alpha.dat and synthetic_dataset_beta.dat
+	synthetic_dataset_alpha.dat is a training set, thus having a 'Class' column.
+	synthetic_dataset_beta.dat is a set to be classified, and therefore the 'Class' column is absent.
+The pipeline in the script 'example_synthetic_dataset.R' exploits these datasets to show how to use the package functions.
+The examples reported in 'example_synthetic_dataset.R' are discussed in more details within the user manual.
+
+# Real data examples
+This folder contains two experimental datasets, each one divided into a training set and a test set:
+	real_dataset_1_training.dat, real_dataset_1_testing.dat real_dataset_1_additional.dat
+		These two files contain a first dataset, which was part of the following work:
+		L. Ricci et al., "Statistical analysis of a Bayesian classifier based on the expression of miRNAs", BMC Bioinformatics 16:287 (2015) DOI:10.1186/s12859-015-0715-9
+		The dataset was published alongside this work as Supplementary Material and can be downloaded at the following URL:
+		https://static-content.springer.com/esm/art%3A10.1186%2Fs12859-015-0715-9/MediaObjects/12859_2015_715_MOESM1_ESM.txt
+
+	real_dataset_2_training.dat, real_dataset_2_testing.dat
+		These two files contain the second dataset, which was part of the following work:
+		S. Detassis et al., "miR375-3p Distinguishes Low-Grade Neuroendocrine From Non-neuroendocrine Lung Tumors in FFPE Samples", Frontiers in Molecular Biosciences 7:86 (2020) DOI:10.3389/fmolb.2020.00086
+		The dataset was submitted to the GEO database (https://www.ncbi.nlm.nih.gov/geo/) and is waiting for approval.
+		The corresponding URL will be added to this README file as soon as it is available.
+Two example scripts, 'example_real_dataset_1.R' and 'example_real_dataset_2.R', provide pipelines that analyze these data.
+
+# Other files
+Files whose name starts with "test_" are related to post-install tests of the package and can be ignored.

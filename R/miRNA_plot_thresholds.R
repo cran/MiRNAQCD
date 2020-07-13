@@ -46,12 +46,14 @@
 #' @param thresholdsFrame Diagnostic threshold values (data frame) to be used for the plot.
 #' @param outputFileLabel Label to be used to build the name of the output file.
 #' @param plotFormat String to set the format of the output file. Can either be 'pdf' (default) or 'png'.
+#' @param scorePlotParameters String specifying the parameters of the score plot y-axis. If empty, the axis is configured by assessing suitable parameters from the data. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.
+#' @param colorComplementFlag Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red.
 #'
 #' @return A ggplot object containing the plot.
 #'
 #' This function is not exported to the package NAMESPACE, but it is called by other functions of the same package.
 
-miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel, plotFormat="pdf") {
+miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel, plotFormat="pdf", scorePlotParameters=character(), colorComplementFlag=FALSE) {
 
 	title <- "Diagnosis results"
 	size <- 24
@@ -63,8 +65,26 @@ miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel,
 	dataTarget <- subset(inputDataset, inputDataset$Diagnosis == 'target')
 	dataVersus <- subset(inputDataset, inputDataset$Diagnosis == 'versus')
 
-	maxPlot <- round(max(inputDataset$Score)+0.5,0)
-	minPlot <- round(min(inputDataset$Score)-0.5,0)
+	if (length(scorePlotParameters) > 0) {
+		parseParameters <- strsplit(scorePlotParameters, "_", fixed = TRUE)
+		minPlot <- as.double(parseParameters[[1]][1])
+		maxPlot <- as.double(parseParameters[[1]][2])
+		ytics <- as.double(parseParameters[[1]][3])
+	} else {
+		maxPlot <- round(max(inputDataset$Score)+0.5,0)
+		minPlot <- round(min(inputDataset$Score)-0.5,0)
+		ytics <- (maxPlot - minPlot) / 6.0
+	}
+
+	if (dim(inputDataset)[1] <= 40) {
+		xtics <- 5
+	} else if (dim(inputDataset)[1] <= 80) {
+		xtics <- 10
+	} else if (dim(inputDataset)[1] <= 160) {
+		xtics <- 20
+	} else {
+		xtics <- 40
+	}
 
 	chi <- as.numeric(as.vector(thresholdsFrame$Threshold))
 	dchi <- as.numeric(as.vector(thresholdsFrame$DeltaThreshold))
@@ -74,29 +94,38 @@ miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel,
 	dchiDown <- as.numeric(as.vector(thresholdsFrame$DChiDown))
 
 
+	versusColor <- "red"
+	targetColor <- "blue"
+	rectanglePalette <- c("green", "lightgreen", "yellow", "orange")
+	if (colorComplementFlag) {
+		versusColor <- "blue"
+		targetColor <- "red"
+		rectanglePalette <- rev(rectanglePalette)
+	}
+
 	rects <- data.frame(ystart = c(-Inf,chiDown,chi,chiUp), yend = c(chiDown,chi,chiUp,Inf), Diagnosis = c("4", "3", "2", "1"))
 	plotObject <- ggplot2::ggplot() +
 		ggplot2::theme(legend.title=ggplot2::element_text(size=14)) +
 		ggplot2::theme(legend.text=ggplot2::element_text(size=14)) +
 		ggplot2::geom_rect(data = rects, ggplot2::aes(xmin=-Inf, xmax=Inf, ymin=rects$ystart, ymax=rects$yend, fill=rects$Diagnosis), alpha = 0.4) +
-		ggplot2::scale_fill_manual(name= "Score", values= c("green", "lightgreen", "yellow", "orange"), labels=c("target", "", "", "versus")) +
+		ggplot2::scale_fill_manual(name= "Score", values=rectanglePalette, labels=c("target", "", "", "versus")) +
 		ggplot2::ggtitle(title) +
 		ggplot2::theme(plot.title = ggplot2::element_text(lineheight=.8, size=size, face="bold", hjust = 0.25, vjust = -5)) +
 		ggplot2::xlab("sample #") + ggplot2::ylab("y") +
 		ggplot2::theme(axis.text=ggplot2::element_text(size=14,face="bold",color=1), axis.title=ggplot2::element_text(size=20,face="bold")) +
-		ggplot2::scale_x_continuous(breaks=seq(0,dim(inputDataset)[1],length.out=5)) +
-		ggplot2::scale_y_continuous(breaks=seq(minPlot,maxPlot,length.out=11), limits=c(minPlot, maxPlot)) +
+		ggplot2::scale_x_continuous(breaks=seq(0,dim(inputDataset)[1],by=xtics)) +
+		ggplot2::scale_y_continuous(breaks=seq(minPlot,maxPlot,ytics), limits=c(minPlot, maxPlot)) +
 		ggplot2::geom_point(data=inputDataset, ggplot2::aes(x=1:nrow(inputDataset), y=inputDataset$Score, color=inputDataset$Diagnosis), size=3) +
-		ggplot2::scale_colour_manual(name="Diagnosis", values=c("blue", "red")) +
+		ggplot2::scale_colour_manual(name="Diagnosis", values=c(targetColor, versusColor)) +
 		ggplot2::geom_hline(yintercept=max(chi), linetype=1, color="black", size = 1.2) +
 		ggplot2::geom_hline(yintercept=max(chi+dchi), linetype=4, color="black", size = 0.6) +
 		ggplot2::geom_hline(yintercept=max(chi-dchi), linetype=4, color="black", size = 0.6) +
-		ggplot2::geom_hline(yintercept=max(chiUp), linetype=1, color="blue", size = 1.0) +
-		ggplot2::geom_hline(yintercept=max(chiUp+dchiUp), linetype=4, color="blue", size = 0.6) +
-		ggplot2::geom_hline(yintercept=max(chiUp-dchiUp), linetype=4, color="blue", size = 0.6) +
-		ggplot2::geom_hline(yintercept=max(chiDown), linetype=1, color="red", size = 1.0) +
-		ggplot2::geom_hline(yintercept=max(chiDown+dchiDown), linetype=4, color="red", size = 0.6) +
-		ggplot2::geom_hline(yintercept=max(chiDown-dchiDown), linetype=4, color="red", size = 0.6) +
+		ggplot2::geom_hline(yintercept=max(chiUp), linetype=1, color=targetColor, size = 1.0) +
+		ggplot2::geom_hline(yintercept=max(chiUp+dchiUp), linetype=4, color=targetColor, size = 0.6) +
+		ggplot2::geom_hline(yintercept=max(chiUp-dchiUp), linetype=4, color=targetColor, size = 0.6) +
+		ggplot2::geom_hline(yintercept=max(chiDown), linetype=1, color=versusColor, size = 1.0) +
+		ggplot2::geom_hline(yintercept=max(chiDown+dchiDown), linetype=4, color=versusColor, size = 0.6) +
+		ggplot2::geom_hline(yintercept=max(chiDown-dchiDown), linetype=4, color=versusColor, size = 0.6) +
 
 	switch(plotFormat,
 		png = suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_scores.png"), device="png")),		# png case

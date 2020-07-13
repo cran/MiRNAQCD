@@ -8,7 +8,9 @@ miRNA_plotThresholds(
   inputDataset,
   thresholdsFrame,
   outputFileLabel,
-  plotFormat = "pdf"
+  plotFormat = "pdf",
+  scorePlotParameters = character(),
+  colorComplementFlag = FALSE
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ miRNA_plotThresholds(
 \item{outputFileLabel}{Label to be used to build the name of the output file.}
 
 \item{plotFormat}{String to set the format of the output file. Can either be 'pdf' (default) or 'png'.}
+
+\item{scorePlotParameters}{String specifying the parameters of the score plot y-axis. If empty, the axis is configured by assessing suitable parameters from the data. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
+
+\item{colorComplementFlag}{Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red.}
 }
 \value{
 A ggplot object containing the plot.

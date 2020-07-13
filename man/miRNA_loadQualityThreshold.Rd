@@ -13,11 +13,13 @@ miRNA_loadQualityThreshold(inputFileName, sep = "")
 }
 \value{
 A data frame containing the columns 'miRNA' and 'QualityThreshold'.
+
+Please refer to the user manual installed in "/path-to-library/MiRNAQCD/doc/manual.pdf" for detailed function documentation. The path "/path-to-library" can be shown from R by calling ".libPaths()"
 }
 \description{
 This function loads from file a data frame containing the quality threshold values for a set of miRNAs.
 }
 \examples{
-requiredFile = paste(system.file(package="MiRNAQCD"), "/extdata/dataset_alpha_qt.dat", sep='')
+requiredFile = paste(system.file(package="MiRNAQCD"), "/extdata/test_dataset_alpha_qt.dat", sep='')
 qtDataFrame <- miRNA_loadQualityThreshold(requiredFile)
 }

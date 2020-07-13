@@ -9,20 +9,30 @@ miRNA_diagnosis(
   inputMiRNAList,
   coeffList,
   inputThreshold,
+  inputTargetList = character(),
+  inputVersusList = character(),
   saveOutputFile = FALSE,
   outputFileBasename = "",
   sep = "\\t",
-  plotFormat = "pdf"
+  plotFormat = "pdf",
+  scorePlotParameters = character(),
+  scorePlotAscending = TRUE,
+  colorComplementFlag = FALSE,
+  histogramParameters = character()
 )
 }
 \arguments{
-\item{inputDataset}{Dataset (data frame) to be classified. The data frame must comply with the output format of the quality control functions (miRNA_expressionPreprocessing and miRNA_removeOutliers), thus containing the columns 'Subject', 'miRNA', 'Mean', 'StdDev', 'SampleSize'. Any other column is ignored, and any missing column forbids execution.}
+\item{inputDataset}{Dataset (data frame) to be classified. The data frame must comply with the output format of the quality control functions (miRNA_expressionPreprocessing and miRNA_removeOutliers), thus containing the columns 'Subject', 'miRNA', 'Mean', 'StdDev', 'SampleSize'. Any other column is ignored, and any missing column forbids execution. If the 'Performance analysis mode' is selected (see inputTargetList), the dataset has to contain the 'Class' column as well.}
 
 \item{inputMiRNAList}{List of miRNAs to be used by the classifier. The chosen miRNAs must be present in the 'miRNA' column of the inputDataset.}
 
 \item{coeffList}{List of coefficients for the classifier. The number of coefficients must be the same as the number of used miRNAs and listed in the same order.}
 
 \item{inputThreshold}{Diagnostic threshold data frame for the classifier. The data frame must comply with the output format of the classifier setup function (miRNA_classifierSetup), thus containing the columns 'Threshold', 'DeltaThreshold', 'ChiUp', 'DChiUp', 'ChiDown', 'DChiDown'. Any other column is ignored.}
+
+\item{inputTargetList}{List of classes to use as target. Providing this argument corresponds to selecting the 'Performance analysis mode'. Consequently, inputDataset is expected to contain the 'Class' column as well. The chosen target must correspond to at least one of the classes present in the 'Class' column of the inputDataset.}
+
+\item{inputVersusList}{List of classes to use as versus in 'Performance analysis mode'. If the argument is left empty, all classes present in the 'Class' column of the inputDataset, minus the Target classes, are used as Versus.}
 
 \item{saveOutputFile}{Boolean option setting whether results are written to file (TRUE) or not (FALSE). Default is FALSE.}
 
@@ -31,19 +41,33 @@ miRNA_diagnosis(
 \item{sep}{Field separator character for the output file; the default is tabulation.}
 
 \item{plotFormat}{String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".}
+
+\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
+
+\item{scorePlotAscending}{Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE.}
+
+\item{colorComplementFlag}{Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red. This argument is meaningful only if saveOutputFile is set to TRUE.}
+
+\item{histogramParameters}{(Used in 'Performance analysis mode' only). String specifying the parameters used to build the histogram. If empty, the histogram is built by assessing suitable parameters from the data. This parameter is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "xl_xu_bw", where: xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.}
 }
 \value{
 A data frame containing the columns 'Subject', 'Diagnosis' and 'Score'.
+
+Please refer to the user manual installed in "/path-to-library/MiRNAQCD/doc/manual.pdf" for detailed function documentation. The path "/path-to-library" can be shown from R by calling ".libPaths()"
 }
 \description{
 This function classifies the entries of the input dataset as either target or versus by using the chosen classifier and given the corresponding disgnostic threshold value.
 }
+\details{
+This function can also run in 'Performance analysis mode' to evaluate the performance of a classifier by running it on an already-classified dataset.
+In order to carry out performance analysis, inputDataset has to contain a 'Class' column. Moreover, a list of Target classes has to be provided to the function via the inputTargetList argument.
+}
 \examples{
 requiredDataFile = paste(system.file(package="MiRNAQCD"),
-		"/extdata/dataset_beta_clean.dat", sep='')
+		"/extdata/test_dataset_beta_clean.dat", sep='')
 myDataFrame <- read.table(file=requiredDataFile, header=TRUE)
 requiredThresholdFile = paste(system.file(package="MiRNAQCD"),
-		"/extdata/dataset_alpha_threshold.txt", sep='')
+		"/extdata/test_dataset_alpha_threshold.txt", sep='')
 thresholdDataFrame <- read.table(file=requiredThresholdFile, header=TRUE)
 mirnaToUse <- c("FX", "FZ")
 coefficientsToUse <- c(1.0, -1.0)

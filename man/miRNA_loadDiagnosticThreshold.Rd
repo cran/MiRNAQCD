@@ -13,12 +13,14 @@ miRNA_loadDiagnosticThreshold(inputFileName, sep = "")
 }
 \value{
 A data frame containing all the columns present in the file.
+
+Please refer to the user manual installed in "/path-to-library/MiRNAQCD/doc/manual.pdf" for detailed function documentation. The path "/path-to-library" can be shown from R by calling ".libPaths()"
 }
 \description{
 This function loads from file a data frame containing the diagnostic threshold values of a trained classifier.
 }
 \examples{
 requiredFile = paste(system.file(package="MiRNAQCD"),
-	"/extdata/dataset_alpha_threshold.txt", sep='')
+	"/extdata/test_dataset_alpha_threshold.txt", sep='')
 threshold <- miRNA_loadDiagnosticThreshold(requiredFile)
 }
