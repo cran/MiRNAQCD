@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.0 - June 2020
+## Version 1.1.1 - February 2021
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,13 +12,13 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (2),
-##	Michela A. Denti (2) and Leonardo Ricci (1,3)
+##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
-##	(2) Department of Cellular, Computational and Integrative Biology
-##		(CIBIO), University of Trento, 38123 Trento, Italy
-##	(3) CIMeC, Center for Mind/Brain Sciences, University of Trento,
+##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
 ##		38068 Rovereto, Italy
+##	(3) Department of Cellular, Computational and Integrative Biology
+##		(CIBIO), University of Trento, 38123 Trento, Italy
 ##
 ##	michele.castelluzzo@unitn.it
 ##	alessio.perinelli@unitn.it
@@ -512,7 +512,7 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 				cat("\n", file=thresholdFileName, append = TRUE)
 
 				utils::write.table(format(outputThresholdFrame, drop0trailing=FALSE), file=thresholdFileName, append=TRUE, sep=sep, row.names=FALSE, col.names=TRUE, quote=FALSE)
-				utils::write.table(format(subset(completeDataFrame, select=c("Subject", "Diagnosis", "Score")), drop0trailing=FALSE), file=scoresFileName, append=TRUE, sep=sep, row.names=FALSE, col.names=TRUE, quote=FALSE)
+				utils::write.table(format(subset(completeDataFrame, select=c("Subject", "Diagnosis", "Score")), drop0trailing=FALSE), file=scoresFileName, append=FALSE, sep=sep, row.names=FALSE, col.names=TRUE, quote=FALSE)
 				cat("Confusion matrix:\tPredicted\tPredicted\n", append=FALSE, file=confusionMatrixFileName)
 				cat("\t\t\tTarget\t\tVersus\n", append=TRUE, file=confusionMatrixFileName)
 				cat(paste("Actual Target\t\t", nr_target_true, "\t\t", nr_target_false, "\n", sep=""), append=TRUE, file=confusionMatrixFileName)
@@ -596,7 +596,7 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 
 		localPrecision <- 2
 		if (normalizerFlag) {
-			matrixLabels <- paste("\u0394", listOfFeature, sep='')
+			matrixLabels <- paste("D", listOfFeature, sep='')
 		} else {
 			matrixLabels <- listOfFeature
 		}

@@ -7,7 +7,7 @@
 miRNA_expressionPreprocessing(inputDataset, multipletSize)
 }
 \arguments{
-\item{inputDataset}{Dataset (data frame) to be pre-processed. The data frame must contain the columns 'Subject', 'miRNA', 'Value' and possibly 'Class'. Any other column is ignored, and any missing column forbids execution.}
+\item{inputDataset}{Dataset (data frame) to be pre-processed. The data frame must contain the columns 'Subject', 'miRNA', 'Value' and possibly 'Class'. Any other column is ignored, and any missing column forbids execution. Please note that using the character '-' within the dataset causes undefined behaviour (even if data were correctly loaded by 'read.table').}
 
 \item{multipletSize}{Size of the multiplets to be considered. Any multiplet of different size is ignored.}
 }

@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.0 - June 2020
+## Version 1.1.1 - February 2021
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,13 +12,13 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (2),
-##	Michela A. Denti (2) and Leonardo Ricci (1,3)
+##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
-##	(2) Department of Cellular, Computational and Integrative Biology
-##		(CIBIO), University of Trento, 38123 Trento, Italy
-##	(3) CIMeC, Center for Mind/Brain Sciences, University of Trento,
+##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
 ##		38068 Rovereto, Italy
+##	(3) Department of Cellular, Computational and Integrative Biology
+##		(CIBIO), University of Trento, 38123 Trento, Italy
 ##
 ##	michele.castelluzzo@unitn.it
 ##	alessio.perinelli@unitn.it
@@ -281,8 +281,8 @@ miRNA_diagnosis <- function(inputDataset, inputMiRNAList, coeffList, inputThresh
 
 		dataFrameTemp_T <- unique(processedFrameToWrite[processedFrameToWrite$Class %in% listOfTargets, ])
 		names(dataFrameTemp_T) <- c("Subject", "ClassifierDiagnosis", "Score", "Class")
-		nr_target_true <- NROW(dataFrameTemp[dataFrameTemp_T$ClassifierDiagnosis == "target", ])
-		nr_target_false <- NROW(dataFrameTemp[dataFrameTemp_T$ClassifierDiagnosis == "versus", ])
+		nr_target_true <- NROW(dataFrameTemp_T[dataFrameTemp_T$ClassifierDiagnosis == "target", ])
+		nr_target_false <- NROW(dataFrameTemp_T[dataFrameTemp_T$ClassifierDiagnosis == "versus", ])
 		completeDataFrame <- cbind(dataFrameTemp_T, Diagnosis=rep("target", length(dataFrameTemp_T[,1])))
 
 		dataFrameTemp_V <- unique(processedFrameToWrite[processedFrameToWrite$Class %in% listOfVersus, ])

@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.0 - June 2020
+## Version 1.1.1 - February 2021
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,13 +12,13 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (2),
-##	Michela A. Denti (2) and Leonardo Ricci (1,3)
+##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
-##	(2) Department of Cellular, Computational and Integrative Biology
-##		(CIBIO), University of Trento, 38123 Trento, Italy
-##	(3) CIMeC, Center for Mind/Brain Sciences, University of Trento,
+##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
 ##		38068 Rovereto, Italy
+##	(3) Department of Cellular, Computational and Integrative Biology
+##		(CIBIO), University of Trento, 38123 Trento, Italy
 ##
 ##	michele.castelluzzo@unitn.it
 ##	alessio.perinelli@unitn.it
@@ -76,8 +76,24 @@ miRNA_plotROC <- function(inputDataset, outputFileLabel, plotFormat="pdf") {
 		ggplot2::theme(legend.position = "none", legend.justification = c(0, 1), legend.background = ggplot2::element_rect(colour = NA, fill = "white"), legend.title=ggplot2::element_text(size=20), legend.text=ggplot2::element_text(size=20))
 
 	switch(plotFormat,
-		png = suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_ROC.png"), device="png")),		# png case
-		suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_ROC.pdf"), device=grDevices::cairo_pdf))	# default pdf
+		png = {if (capabilities("png")) {
+			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_ROC.png"), device="png"))		# png case
+		} else {
+			warning("WARNING: could not save a png image for the graph; check with 'capabilities(\"png\")' whether you R setup has the capability of saving png pictures.\n")
+		}},
+		{if (capabilities("cairo")) {
+			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_ROC.pdf"), device=grDevices::cairo_pdf))	# default pdf
+		} else {
+			tryCatch(
+				{suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_ROC.pdf"), device="pdf"))},
+				error=function(cond) {
+					message("WARNING: Could not save a pdf image; no pdf-capable grDevice is available.\n")
+				},
+				warning=function(cond) {
+					message("WARNING: Output pdf file might have issues.\n")
+				}
+			)
+		}}
 	)
 
 	return(plotObject)
