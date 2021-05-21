@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.1 - February 2021
+## Version 1.1.2 - May 2021
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,

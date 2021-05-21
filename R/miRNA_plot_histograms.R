@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.1 - February 2021
+## Version 1.1.2 - May 2021
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -160,12 +160,12 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 	}
 	switch(plotFormat,
 		png = {if (capabilities("png")) {
-			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_histogram.png"), device="png"))		# png case
+			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_histogram.png"), device="png"))
 		} else {
 			warning("WARNING: could not save a png image for the graph; check with 'capabilities(\"png\")' whether you R setup has the capability of saving png pictures.\n")
 		}},
 		{if (capabilities("cairo")) {
-			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_histogram.pdf"), device=grDevices::cairo_pdf))	# default pdf
+			suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_histogram.pdf"), device=grDevices::cairo_pdf))
 		} else {
 			tryCatch(
 				{suppressMessages(ggplot2::ggsave(paste(sep="", outputFileLabel, "_histogram.pdf"), device="pdf"))},
@@ -178,7 +178,6 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 			)
 		}}
 	)
-
 
 	return(plotObject)
 }
