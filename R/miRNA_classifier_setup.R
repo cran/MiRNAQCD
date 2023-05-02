@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.2 - May 2021
+## Version 1.1.3 - April 2023
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,7 +12,7 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (3),
 ##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
 ##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
@@ -58,13 +58,13 @@
 #' @param sep Field separator character for the output files; the default is tabulation.
 #' @param plotFormat String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".
 #' @param scorePlotAscending Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'.
-#' @param scorePlotParameters String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.
+#' @param scorePlotParameters String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data. This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.
 #' @param histogramParameters String specifying the parameters used to build histograms. If empty, histograms are built by assessing suitable parameters from the data. This parameter is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the following format: "xl_xu_bw", where xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.
 #' @param colorComplementFlag Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red. This argument is meaningful only if saveOutputFile is set to TRUE.
 #'
 #' Beware! Cross-correlation coefficients, as well as Shapiro-Wilk tests for normality, require at least three data samples. In case of less than three samples, those tests are skipped and "NA" (not available) is reported in the corresponding output.
 #'
-#' @return In 'Analysis mode', a data frame containing the columns 'miRNA', 'Diagnosis', 'NumberOfSubjects', 'Mean', 'StdDev', 'NormalityTest', 't-test'. In 'Training mode', a data frame containing the columns 'Threshold', 'DeltaThreshold', 'DPrime', 'Pc', 'ChiUp', 'DChiUp', 'ChiDown', 'DChiDown'.
+#' @return In 'Analysis mode', a data frame containing the columns 'miRNA', 'Diagnosis', 'NumberOfSubjects', 'Mean', 'StdDev', 'NormalityTest', 't-test'. In 'Training mode', a data frame containing the columns 'Threshold', 'DeltaThreshold', 'DPrime', 'Pc', 'ChiUp', 'DChiUp', 'ChiDown', 'DChiDown', 'Accuracy', 'DAccuracy', 'Specificity', 'Sensitivity', 'F1-score', 'DPrime', 'AUC', 'AUCDown', 'AUCUp', 't-test', 'NormalityTest-target', 'NormalityTest-versus'.
 #'
 #' @examples
 #' requiredFile = paste(system.file(package="MiRNAQCD"),
@@ -88,7 +88,7 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 
 	## Input validation and pre-processing
 
-	if (!(("Subject" %in% colnames(inputDataset)) & ("miRNA" %in% colnames(inputDataset)) & ("Mean" %in% colnames(inputDataset)) & ("StdDev" %in% colnames(inputDataset)) & ("SampleSize" %in% colnames(inputDataset) & ("Class" %in% colnames(inputDataset)))))  {
+	if (!(("Subject" %in% colnames(inputDataset)) & ("miRNA" %in% colnames(inputDataset)) & ("Mean" %in% colnames(inputDataset)) & ("StdDev" %in% colnames(inputDataset)) & ("SampleSize" %in% colnames(inputDataset) & ("Class" %in% colnames(inputDataset))))) {
 		stop("ERROR: unsuitable dataset format. Dataset must contain columns 'Subject', 'miRNA', 'Mean', 'StdDev', 'SampleSize', 'Class'.\n")
 	}
 
@@ -291,45 +291,45 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 		sT <- stats::sd(completeDataFrame$Score[completeDataFrame$Diagnosis == "target"])
 		dxT <- sT/sqrt(nT)
 		dsT <- sT/sqrt(2*(nT-1))
-		if (!classifierFlag) {
-			if (length(completeDataFrame$Score[completeDataFrame$Diagnosis == "target"]) > 2) {
-				res <- stats::shapiro.test(completeDataFrame$Score[completeDataFrame$Diagnosis == "target"])
-				shapiroWilkTarget <- (res[[2]])
-			} else {
-				shapiroWilkTarget <- NA
-				warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the target set. Cannot carry out Shapiro-Wilk test.\n")
-			}
+
+		if (length(completeDataFrame$Score[completeDataFrame$Diagnosis == "target"]) > 2) {
+			res <- stats::shapiro.test(completeDataFrame$Score[completeDataFrame$Diagnosis == "target"])
+			shapiroWilkTarget <- (res[[2]])
+		} else {
+			shapiroWilkTarget <- NA
+			warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the target set. Cannot carry out Shapiro-Wilk test.\n")
 		}
+
 		# Versus
 		nV <- length(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"])
 		xV <- mean(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"])
 		sV <- stats::sd(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"])
 		dxV <- sV/sqrt(nV)
 		dsV <- sV/sqrt(2*(nV-1))
-		if (!classifierFlag) {
-			if (length(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"]) > 2) {
-				res <- stats::shapiro.test(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"])
-				shapiroWilkVersus <- (res[[2]])
-			} else {
-				shapiroWilkVersus <- NA
-				warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the versus set. Cannot carry out Shapiro-Wilk test.\n")
-			}
+
+		if (length(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"]) > 2) {
+			res <- stats::shapiro.test(completeDataFrame$Score[completeDataFrame$Diagnosis == "versus"])
+			shapiroWilkVersus <- (res[[2]])
+		} else {
+			shapiroWilkVersus <- NA
+			warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the versus set. Cannot carry out Shapiro-Wilk test.\n")
 		}
+
 		# Target and Versus
 		nTV <- length(completeDataFrame$Score)
 		xTV <- mean(completeDataFrame$Score)
 		sTV <- stats::sd(completeDataFrame$Score)
 		dxTV <- sTV/sqrt(nTV)
 		dsTV <- sTV/sqrt(2*(nTV-1))
-		if (!classifierFlag) {
-			if (length(completeDataFrame$Score) > 2) {
-				res <- stats::shapiro.test(completeDataFrame$Score)
-				shapiroWilk <- (res[[2]])
-			} else {
-				shapiroWilkVersus <- NA
-				warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the dataset. Cannot carry out Shapiro-Wilk test.\n")
-			}
+
+		if (length(completeDataFrame$Score) > 2) {
+			res <- stats::shapiro.test(completeDataFrame$Score)
+			shapiroWilk <- (res[[2]])
+		} else {
+			shapiroWilkVersus <- NA
+			warning("WARNING: miRNA '", currentFeature, "' has less than 3 Subjects in the dataset. Cannot carry out Shapiro-Wilk test.\n")
 		}
+
 		localPrecision <- 1
 		local_muAndS_precision <- localPrecision
 
@@ -426,8 +426,8 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 			performance_accuracy_error <- dpc
 			performance_F1score <- 2.0*nr_target_true / (2.0*nr_target_true + nr_target_false + nr_versus_false)
 
-			outputThresholdFrame <- data.frame(chi, dchi, chiUp, dchiUp, chiDown, dchiDown, performance_accuracy, performance_accuracy_error, performance_specificity, performance_sensitivity, performance_F1score, dee, ciAuc[2], ciAuc[1], ciAuc[3])
-			names(outputThresholdFrame) <- c("Threshold", "DeltaThreshold", "ChiUp", "DChiUp", "ChiDown", "DChiDown", "Accuracy", "DAccuracy", "Specificity", "Sensitivity", "F1-score", "DPrime", "AUC", "AUCDown", "AUCUp")
+			outputThresholdFrame <- data.frame(chi, dchi, chiUp, dchiUp, chiDown, dchiDown, performance_accuracy, performance_accuracy_error, performance_specificity, performance_sensitivity, performance_F1score, dee, ciAuc[2], ciAuc[1], ciAuc[3], signif(tTestRes[[3]],2), signif(shapiroWilkTarget,3), signif(shapiroWilkVersus,3))
+			names(outputThresholdFrame) <- c("Threshold", "DeltaThreshold", "ChiUp", "DChiUp", "ChiDown", "DChiDown", "Accuracy", "DAccuracy", "Specificity", "Sensitivity", "F1-score", "DPrime", "AUC", "AUCDown", "AUCUp", "t-test", "NormalityTest-target", "NormalityTest-versus")
 		}
 
 		## Processing: 5b. In the case of feature analysis (not Classification), prepare output
@@ -488,10 +488,10 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 					confusionMatrixFileName <- paste(thresholdFileName, "_confusion_matrix", ".txt", sep="")
 					thresholdFileName <- paste(thresholdFileName, "_thresholds", ".txt", sep="")
 				} else {
-	 				thresholdFileName <- paste(outputFileBasename, ".txt", sep="")
+					thresholdFileName <- paste(outputFileBasename, ".txt", sep="")
 					scoresFileName <- paste(outputFileBasename, ".dat", sep="")
 					confusionMatrixFileName <- paste(outputFileBasename, "_confusion_matrix.txt", sep="")
-	 			}
+				}
 
 				if (file.exists(thresholdFileName) & file.access(thresholdFileName, mode=2)) {
 					stop("ERROR:\tcannot write ", thresholdFileName, ". Check write permission.\n")
@@ -535,7 +535,7 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 					} else {
 						plotFileName <- paste(outputFileBasename, currentFeature, sep="_")
 					}
-		 		}
+				}
 
 				if (classifierFlag) {
 					histPlot <- miRNA_plotHistograms(completeDataFrame, outputThresholdFrame, plotFileName, plotFormat=plotFormat, histogramParameters=histogramParameters, colorComplementFlag=colorComplementFlag)
@@ -578,8 +578,8 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 				}
 				statisticsFileName <- paste(statisticsFileName, ".txt", sep="")
 			} else {
-	 			statisticsFileName <- paste(outputFileBasename, ".txt", sep="")
-	 		}
+				statisticsFileName <- paste(outputFileBasename, ".txt", sep="")
+			}
 
 			if (file.exists(statisticsFileName) & file.access(statisticsFileName, mode=2)) {
 				stop("ERROR: cannot write ", statisticsFileName, ". Check write permission.\n")
@@ -705,7 +705,7 @@ miRNA_classifierSetup <- function(inputDataset, inputTargetList, inputVersusList
 		}
 
 		cat("###############################\n\n", append=TRUE, file=statisticsFileName)
-		cat("##  Evaluation on subjects whose diagnosis belongs to the union of Target and Versus sets\n", append=TRUE, file=statisticsFileName)
+		cat("## Evaluation on subjects whose diagnosis belongs to the union of Target and Versus sets\n", append=TRUE, file=statisticsFileName)
 		cat("# Correlation coefficients:\n", append=TRUE, file=statisticsFileName)
 		cat("\tr", paste(matrixLabels, sep=sep), sep=sep, append=TRUE, file=statisticsFileName)
 		cat("\n", append=TRUE, file=statisticsFileName)

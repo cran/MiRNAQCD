@@ -42,7 +42,7 @@ miRNA_diagnosis(
 
 \item{plotFormat}{String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".}
 
-\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
+\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data. This argument is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
 
 \item{scorePlotAscending}{Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE.}
 

@@ -41,7 +41,7 @@ miRNA_classifierSetup(
 
 \item{scorePlotAscending}{Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'.}
 
-\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
+\item{scorePlotParameters}{String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data. This argument is meaningful only if saveOutputFile is set to TRUE and the function is running in 'Training mode'. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.}
 
 \item{histogramParameters}{String specifying the parameters used to build histograms. If empty, histograms are built by assessing suitable parameters from the data. This parameter is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the following format: "xl_xu_bw", where xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.}
 
@@ -50,7 +50,7 @@ miRNA_classifierSetup(
 Beware! Cross-correlation coefficients, as well as Shapiro-Wilk tests for normality, require at least three data samples. In case of less than three samples, those tests are skipped and "NA" (not available) is reported in the corresponding output.}
 }
 \value{
-In 'Analysis mode', a data frame containing the columns 'miRNA', 'Diagnosis', 'NumberOfSubjects', 'Mean', 'StdDev', 'NormalityTest', 't-test'. In 'Training mode', a data frame containing the columns 'Threshold', 'DeltaThreshold', 'DPrime', 'Pc', 'ChiUp', 'DChiUp', 'ChiDown', 'DChiDown'.
+In 'Analysis mode', a data frame containing the columns 'miRNA', 'Diagnosis', 'NumberOfSubjects', 'Mean', 'StdDev', 'NormalityTest', 't-test'. In 'Training mode', a data frame containing the columns 'Threshold', 'DeltaThreshold', 'DPrime', 'Pc', 'ChiUp', 'DChiUp', 'ChiDown', 'DChiDown', 'Accuracy', 'DAccuracy', 'Specificity', 'Sensitivity', 'F1-score', 'DPrime', 'AUC', 'AUCDown', 'AUCUp', 't-test', 'NormalityTest-target', 'NormalityTest-versus'.
 }
 \description{
 This function carries out different tasks depending on the input parameters:

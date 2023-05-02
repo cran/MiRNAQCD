@@ -16,7 +16,7 @@ test_that("Test quality thresholds", {
 
 test_that("Test load QT & outlier removal", {
 	qualityThresholdAlpha <- miRNA_loadQualityThreshold(filename_qt)
- 	purifiedDatasetAlpha <- miRNA_removeOutliers(preprocessedDatasetAlpha, qualityThresholdAlpha)
+	purifiedDatasetAlpha <- miRNA_removeOutliers(preprocessedDatasetAlpha, qualityThresholdAlpha)
 	expect_equal(length(purifiedDatasetAlpha[,1]), 345)
 })
 

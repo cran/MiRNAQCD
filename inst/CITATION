@@ -1,6 +1,6 @@
-citHeader("If you use MiRNAQCD in published research, please cite the following papers.")
+citation(auto = meta)
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
 		textVersion = "L. Ricci, V. Del Vescovo, C. Cantaloni, M. Grasso, M. Barbareschi and M. A. Denti, ''Statistical analysis of a Bayesian classifier based on the expression of miRNAs'', BMC Bioinformatics 16:287 (2015). DOI: 10.1186/s12859-015-0715-9",
 		header = "The primary work concerning the method implemented in the package is:",
 		title = "Statistical analysis of a Bayesian classifier based on the expression of miRNAs",
@@ -17,7 +17,7 @@ citEntry(entry = "Article",
 		doi = "10.1186/s12859-015-0715-9"
 	)
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
 		textVersion = "M. Castelluzzo, A. Perinelli, S. Detassis, M. A. Denti and L. Ricci, ''MiRNA-QC-and-Diagnosis: An R package for diagnosis based on MiRNA expression'', SoftwareX 12:100569 (2020). DOI: 10.1016/j.softx.2020.100569",
 		header = "The publication describing the software package is:",
 		title = "MiRNA-QC-and-Diagnosis: An R package for diagnosis based on MiRNA expression",

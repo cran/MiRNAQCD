@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.2 - May 2021
+## Version 1.1.3 - April 2023
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,7 +12,7 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (3),
 ##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
 ##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
@@ -103,7 +103,16 @@ miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel,
 		rectanglePalette <- rev(rectanglePalette)
 	}
 
-	rects <- data.frame(ystart = c(-Inf,chiDown,chi,chiUp), yend = c(chiDown,chi,chiUp,Inf), Diagnosis = c("4", "3", "2", "1"))
+	threshold <- chi
+	thresholdUp <- chiUp
+	thresholdDown <- chiDown
+	if (maxPlot < chiUp)
+		thresholdUp <- Inf
+	if (minPlot > chiDown)
+		thresholdDown <- -Inf
+
+	rects <- data.frame(ystart = c(-Inf,thresholdDown,threshold,thresholdUp), yend = c(thresholdDown,threshold,thresholdUp,Inf), Diagnosis = c("4", "3", "2", "1"))
+
 	plotObject <- ggplot2::ggplot() +
 		ggplot2::theme(legend.title=ggplot2::element_text(size=14)) +
 		ggplot2::theme(legend.text=ggplot2::element_text(size=14)) +
@@ -111,7 +120,7 @@ miRNA_plotThresholds <- function(inputDataset, thresholdsFrame, outputFileLabel,
 		ggplot2::scale_fill_manual(name= "Score", values=rectanglePalette, labels=c("target", "", "", "versus")) +
 		ggplot2::ggtitle(title) +
 		ggplot2::theme(plot.title = ggplot2::element_text(lineheight=.8, size=size, face="bold", hjust = 0.25, vjust = -5)) +
-		ggplot2::xlab("sample #") + ggplot2::ylab("y") +
+		ggplot2::xlab("sample #") + ggplot2::ylab("score") +
 		ggplot2::theme(axis.text=ggplot2::element_text(size=14,face="bold",color=1), axis.title=ggplot2::element_text(size=20,face="bold")) +
 		ggplot2::scale_x_continuous(breaks=seq(0,dim(inputDataset)[1],by=xtics)) +
 		ggplot2::scale_y_continuous(breaks=seq(minPlot,maxPlot,ytics), limits=c(minPlot, maxPlot)) +

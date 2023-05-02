@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.2 - May 2021
+## Version 1.1.3 - April 2023
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,7 +12,7 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (3),
 ##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
 ##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
@@ -56,7 +56,8 @@
 
 miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outputFileLabel, plotFormat="pdf", histogramParameters=character(), colorComplementFlag=FALSE) {
 
-	title <- "Histograms of Target and Versus"
+	#title <- "Histograms of Target and Versus"
+	title <- ""
 	size <- 24
 
 	dnorm.count <- function(x, mean = 0, sd = 1, log = FALSE, n = 1, binwidth = 1) {
@@ -90,11 +91,11 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 	sV <- stats::sd(inputDataset$Score[inputDataset$Diagnosis == "versus"])
 
 	if (length(histogramParameters) > 0) {
-		 parseParameters <- strsplit(histogramParameters, "_", fixed = TRUE)
-		 minPlot <- as.double(parseParameters[[1]][1])
-		 maxPlot <- as.double(parseParameters[[1]][2])
-		 bwT <- as.double(parseParameters[[1]][3])
-		 bwV <- bwT
+		parseParameters <- strsplit(histogramParameters, "_", fixed = TRUE)
+		minPlot <- as.double(parseParameters[[1]][1])
+		maxPlot <- as.double(parseParameters[[1]][2])
+		bwT <- as.double(parseParameters[[1]][3])
+		bwV <- bwT
 	} else {
 		if (nT == 0 && nV != 0) {
 			maxPlot <- round(max(inputDataset$Score[inputDataset$Diagnosis == "versus"])+0.5,0)
@@ -115,7 +116,7 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 			ggplot2::theme(legend.position="none") +
 			ggplot2::ggtitle(title) +
 			ggplot2::theme(plot.title = ggplot2::element_text(lineheight=.8, size=size, face="bold", hjust = 0.25 + (30-size)*0.1, vjust = -5)) +
-			ggplot2::xlab("x") +
+			ggplot2::xlab("score") +
 			ggplot2::theme(axis.text=ggplot2::element_text(size=14,face="bold",color=1), axis.title=ggplot2::element_text(size=20,face="bold")) +
 			ggplot2::scale_x_continuous(breaks=round(seq(minPlot,maxPlot,by=bwV), 1)) +
 			ggplot2::scale_y_continuous()+
@@ -130,7 +131,7 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 			ggplot2::theme(legend.position="none") +
 			ggplot2::ggtitle(title) +
 			ggplot2::theme(plot.title = ggplot2::element_text(lineheight=.8, size=size, face="bold", hjust = 0.25 + (30-size)*0.1, vjust = -5)) +
-			ggplot2::xlab("x") +
+			ggplot2::xlab("score") +
 			ggplot2::theme(axis.text=ggplot2::element_text(size=14,face="bold",color=1), axis.title=ggplot2::element_text(size=20,face="bold")) +
 			ggplot2::scale_x_continuous(breaks=round(seq(minPlot,maxPlot,by=2.0*bwT), 1)) +
 			ggplot2::scale_y_continuous()+
@@ -145,7 +146,7 @@ miRNA_plotHistograms <- function(inputDataset, thresholdFrame=character(), outpu
 			ggplot2::theme(legend.position="none") +
 			ggplot2::ggtitle(title) +
 			ggplot2::theme(plot.title = ggplot2::element_text(lineheight=.8, size=size, face="bold", hjust = 0.25 + (30-size)*0.1, vjust = -5)) +
-			ggplot2::xlab("x") +
+			ggplot2::xlab("score") +
 			ggplot2::theme(axis.text=ggplot2::element_text(size=14,face="bold",color=1), axis.title=ggplot2::element_text(size=20,face="bold")) +
 			ggplot2::scale_x_continuous(breaks=round(seq(minPlot,maxPlot,by=2.0*bwT), 1)) +
 			ggplot2::scale_y_continuous()+

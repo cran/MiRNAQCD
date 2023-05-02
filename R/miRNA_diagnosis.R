@@ -2,7 +2,7 @@
 ##
 ## This file is part of the miRNA-QC-and-Diagnosis software package.
 ##
-## Version 1.1.2 - May 2021
+## Version 1.1.3 - April 2023
 ##
 ##
 ## The miRNA-QC-and-Diagnosis package is free software; you can use it,
@@ -12,7 +12,7 @@
 ## level of the package distribution.
 ##
 ## Authors:
-##	Michele Castelluzzo (1), Alessio Perinelli (2), Simone Detassis (3),
+##	Michele Castelluzzo (1), Alessio Perinelli (1), Simone Detassis (3),
 ##	Michela A. Denti (3) and Leonardo Ricci (1,2)
 ##	(1) Department of Physics, University of Trento, 38123 Trento, Italy
 ##	(2) CIMeC, Center for Mind/Brain Sciences, University of Trento,
@@ -56,7 +56,7 @@
 #' @param sep Field separator character for the output file; the default is tabulation.
 #' @param plotFormat String specifying the format of generated graphic files (plots): can either be "pdf" (default) or "png".
 #' @param scorePlotAscending Boolean option to set the direction in which samples are ordered: TRUE corresponds to samples ordered by ascending score, FALSE corresponds to samples ordered by descending score. Default is TRUE. This argument is meaningful only if saveOutputFile is set to TRUE.
-#' @param scorePlotParameters String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data.  This argument is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.
+#' @param scorePlotParameters String specifying the y-axis parameters of the score plot. If empty, the axis is configured by assessing suitable parameters from the data. This argument is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "yl_yu_yt", where: yl is the lower y limit; yu is the upper y limit; yt is the interval between tics along the axis.
 #' @param histogramParameters (Used in 'Performance analysis mode' only). String specifying the parameters used to build the histogram. If empty, the histogram is built by assessing suitable parameters from the data. This parameter is meaningful only if saveOutputFile is set to TRUE. The string has to comply with the format "xl_xu_bw", where: xl is the lower boundary of the leftmost bin; xu is the upper boundary of the rightmost bin; bw is the bin width.
 #' @param colorComplementFlag Boolean option to switch between the default palette (FALSE) and its inverted version (TRUE). Default is FALSE, corresponding to target samples reported in blue and versus samples in red. This argument is meaningful only if saveOutputFile is set to TRUE.
 #'
@@ -83,7 +83,7 @@ miRNA_diagnosis <- function(inputDataset, inputMiRNAList, coeffList, inputThresh
 
 	## Input validation and preprocessing
 
-	if (!(("Subject" %in% colnames(inputDataset)) & ("miRNA" %in% colnames(inputDataset)) & ("Mean" %in% colnames(inputDataset)) & ("StdDev" %in% colnames(inputDataset)) & ("SampleSize" %in% colnames(inputDataset))))  {
+	if (!(("Subject" %in% colnames(inputDataset)) & ("miRNA" %in% colnames(inputDataset)) & ("Mean" %in% colnames(inputDataset)) & ("StdDev" %in% colnames(inputDataset)) & ("SampleSize" %in% colnames(inputDataset)))) {
 		stop("ERROR: unsuitable dataset format. Dataset must contain columns 'Subject', 'miRNA', 'Mean', 'StdDev', 'SampleSize'.\n")
 	}
 
